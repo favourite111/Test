@@ -7,15 +7,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --secondary: #00d4ff;
-      --bg-dark: #0a0e27;
-      --glass: rgba(255, 255, 255, 0.05);
-      --text: #ffffff;
-      --muted: #a0aec0;
-      --radius: 20px;
-      --blur: 20px;
-      --glow: 0 0 30px rgba(102, 126, 234, 0.5);
+      /* Updated colors from video */
+      --primary-start: #00c6ff;
+      --primary-end: #0072ff;
+      --secondary: #00ff88;
+      --accent: #ff0080;
+      --bg-dark: #0a0a1a;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --text-primary: #ffffff;
+      --text-secondary: #a8b3cf;
+      --glow-blue: 0 0 40px rgba(0, 114, 255, 0.6);
+      --glow-green: 0 0 30px rgba(0, 255, 136, 0.5);
+      --radius: 24px;
+      --blur: 25px;
     }
 
     * {
@@ -25,15 +29,15 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
       min-height: 100vh;
       background: var(--bg-dark);
-      color: var(--text);
+      color: var(--text-primary);
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Animated background */
+    /* Animated gradient background - like in video */
     .bg-animation {
       position: fixed;
       top: 0;
@@ -41,41 +45,31 @@
       width: 100%;
       height: 100%;
       z-index: -1;
-      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #4facfe);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
-      filter: blur(100px);
-      opacity: 0.3;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 198, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite;
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
     }
 
-    /* Floating particles */
-    .particles {
+    /* Grid pattern overlay - like in video */
+    .grid-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: -1;
-      overflow: hidden;
-    }
-
-    .particle {
-      position: absolute;
-      background: var(--secondary);
-      border-radius: 50%;
-      opacity: 0.2;
-      animation: float 20s infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-100px) rotate(180deg); }
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.3;
     }
 
     /* Container */
@@ -93,14 +87,14 @@
     /* Hero section */
     .hero {
       text-align: center;
-      max-width: 800px;
-      animation: fadeInUp 1s ease;
+      max-width: 900px;
+      animation: fadeInUp 1.2s ease;
     }
 
     @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
       }
       to {
         opacity: 1;
@@ -108,104 +102,210 @@
       }
     }
 
+    /* SPINNING LOGO - LIKE IN VIDEO */
     .logo-container {
-      margin-bottom: 2rem;
-      animation: pulse 2s ease-in-out infinite;
+      margin-bottom: 2.5rem;
+      perspective: 1000px;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    .logo-wrapper {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
     }
 
     .logo {
-      width: 150px;
-      height: 150px;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
-      border: 4px solid var(--secondary);
-      box-shadow: var(--glow);
       object-fit: cover;
+      border: 4px solid var(--primary-end);
+      box-shadow: var(--glow-blue);
+      animation: spin3D 20s linear infinite;
+      position: relative;
+      z-index: 2;
     }
 
+    @keyframes spin3D {
+      0% { 
+        transform: rotateY(0deg) rotateZ(0deg);
+        box-shadow: var(--glow-blue);
+      }
+      25% {
+        box-shadow: var(--glow-green);
+      }
+      50% { 
+        transform: rotateY(180deg) rotateZ(180deg);
+        box-shadow: 0 0 40px rgba(255, 0, 128, 0.6);
+      }
+      75% {
+        box-shadow: var(--glow-green);
+      }
+      100% { 
+        transform: rotateY(360deg) rotateZ(360deg);
+        box-shadow: var(--glow-blue);
+      }
+    }
+
+    /* Rotating rings around logo */
+    .logo-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 2px solid transparent;
+      animation: rotateRing 8s linear infinite;
+    }
+
+    .logo-ring:nth-child(1) {
+      width: 200px;
+      height: 200px;
+      border-top-color: var(--primary-start);
+      border-right-color: var(--primary-start);
+      opacity: 0.6;
+    }
+
+    .logo-ring:nth-child(2) {
+      width: 220px;
+      height: 220px;
+      border-bottom-color: var(--secondary);
+      border-left-color: var(--secondary);
+      animation-duration: 10s;
+      animation-direction: reverse;
+      opacity: 0.4;
+    }
+
+    @keyframes rotateRing {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Title with gradient */
     h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      background: var(--primary);
+      font-size: 4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-start), var(--primary-end), var(--secondary));
+      background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 1rem;
-      text-shadow: var(--glow);
+      animation: gradientFlow 3s ease infinite;
+      letter-spacing: -2px;
+    }
+
+    @keyframes gradientFlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     .tagline {
-      font-size: 1.3rem;
-      color: var(--muted);
-      margin-bottom: 3rem;
-      font-weight: 300;
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      margin-bottom: 3.5rem;
+      font-weight: 400;
+      letter-spacing: 0.5px;
     }
 
-    /* Features grid */
+    /* Features grid - glassomorphism cards */
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
       margin: 3rem 0;
-      max-width: 900px;
+      max-width: 1000px;
     }
 
     .feature-card {
-      background: var(--glass);
+      background: var(--bg-card);
       backdrop-filter: blur(var(--blur));
       border-radius: var(--radius);
-      padding: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent, rgba(0, 198, 255, 0.1));
+      opacity: 0;
+      transition: opacity 0.4s;
     }
 
     .feature-card:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--glow);
-      border-color: var(--secondary);
+      transform: translateY(-12px);
+      box-shadow: var(--glow-blue);
+      border-color: var(--primary-end);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
     }
 
     .feature-icon {
-      font-size: 3rem;
-      color: var(--secondary);
-      margin-bottom: 1rem;
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
 
     .feature-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: var(--text-primary);
     }
 
     .feature-desc {
-      color: var(--muted);
-      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.6;
     }
 
-    /* CTA Button */
+    /* CTA Button - like in video */
     .cta-container {
-      margin-top: 3rem;
+      margin-top: 4rem;
     }
 
     .cta-btn {
       display: inline-flex;
       align-items: center;
       gap: 1rem;
-      padding: 1.5rem 3rem;
-      font-size: 1.2rem;
+      padding: 1.8rem 3.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
       color: white;
       border: none;
-      border-radius: 50px;
+      border-radius: 60px;
       cursor: pointer;
       text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 20px 40px rgba(0, 114, 255, 0.4);
       position: relative;
       overflow: hidden;
     }
@@ -213,91 +313,120 @@
     .cta-btn::before {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s;
     }
 
     .cta-btn:hover::before {
-      width: 300px;
-      height: 300px;
+      left: 100%;
     }
 
     .cta-btn:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 30px 60px rgba(0, 114, 255, 0.6);
     }
 
-    .cta-btn span {
-      position: relative;
-      z-index: 1;
+    .cta-btn i {
+      transition: transform 0.3s;
+    }
+
+    .cta-btn:hover i {
+      transform: translateX(5px);
     }
 
     /* Stats section */
     .stats {
       display: flex;
-      gap: 3rem;
-      margin-top: 4rem;
+      gap: 4rem;
+      margin-top: 5rem;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .stat-item {
       text-align: center;
+      padding: 1.5rem 2rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(var(--blur));
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s;
+    }
+
+    .stat-item:hover {
+      transform: scale(1.05);
+      border-color: var(--secondary);
     }
 
     .stat-number {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--secondary);
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--secondary), var(--primary-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       display: block;
     }
 
     .stat-label {
-      color: var(--muted);
-      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
       margin-top: 0.5rem;
+      font-weight: 500;
     }
 
     /* Footer */
     .footer {
-      margin-top: 5rem;
+      margin-top: 6rem;
       text-align: center;
-      color: var(--muted);
-      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
     }
 
     .social-links {
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       justify-content: center;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
 
     .social-links a {
-      color: var(--secondary);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: var(--text-primary);
       font-size: 1.5rem;
-      transition: all 0.3s ease;
+      transition: all 0.4s;
     }
 
     .social-links a:hover {
-      transform: scale(1.2);
-      filter: drop-shadow(0 0 10px var(--secondary));
+      transform: translateY(-5px) scale(1.1);
+      background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      box-shadow: var(--glow-blue);
+      border-color: transparent;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
       h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
       }
 
       .tagline {
         font-size: 1.1rem;
+      }
+
+      .logo-wrapper {
+        width: 140px;
+        height: 140px;
       }
 
       .features {
@@ -310,8 +439,8 @@
       }
 
       .cta-btn {
-        padding: 1.2rem 2rem;
-        font-size: 1rem;
+        padding: 1.4rem 2.5rem;
+        font-size: 1.1rem;
       }
     }
   </style>
@@ -319,26 +448,20 @@
 <body>
   <!-- Animated background -->
   <div class="bg-animation"></div>
-
-  <!-- Floating particles -->
-  <div class="particles">
-    <div class="particle" style="width: 4px; height: 4px; left: 10%; animation-delay: 0s;"></div>
-    <div class="particle" style="width: 6px; height: 6px; left: 20%; animation-delay: 2s;"></div>
-    <div class="particle" style="width: 3px; height: 3px; left: 30%; animation-delay: 4s;"></div>
-    <div class="particle" style="width: 5px; height: 5px; left: 40%; animation-delay: 1s;"></div>
-    <div class="particle" style="width: 4px; height: 4px; left: 50%; animation-delay: 3s;"></div>
-    <div class="particle" style="width: 6px; height: 6px; left: 60%; animation-delay: 5s;"></div>
-    <div class="particle" style="width: 3px; height: 3px; left: 70%; animation-delay: 2s;"></div>
-    <div class="particle" style="width: 5px; height: 5px; left: 80%; animation-delay: 4s;"></div>
-    <div class="particle" style="width: 4px; height: 4px; left: 90%; animation-delay: 1s;"></div>
-  </div>
+  
+  <!-- Grid overlay -->
+  <div class="grid-overlay"></div>
 
   <!-- Main container -->
   <div class="container">
     <div class="hero">
-      <!-- Logo -->
+      <!-- Spinning Logo with rings -->
       <div class="logo-container">
-        <img src="https://files.catbox.moe/hoqhfi.jpeg" alt="GIFT MD Logo" class="logo">
+        <div class="logo-wrapper">
+          <div class="logo-ring"></div>
+          <div class="logo-ring"></div>
+          <img src="https://files.catbox.moe/hoqhfi.jpeg" alt="GIFT MD Logo" class="logo">
+        </div>
       </div>
 
       <!-- Title -->
@@ -393,17 +516,17 @@
       <!-- Footer -->
       <div class="footer">
         <div class="social-links">
-          <a href="https://whatsapp.com/channel/0029Va90zAnIHphOuO8Msp3A" target="_blank">
+          <a href="https://whatsapp.com/channel/0029Va90zAnIHphOuO8Msp3A" target="_blank" title="WhatsApp">
             <i class="fab fa-whatsapp"></i>
           </a>
-          <a href="https://github.com/isaacfont461461-cmd/OfficialGift-Md" target="_blank">
+          <a href="https://github.com/isaacfont461461-cmd/OfficialGift-Md" target="_blank" title="GitHub">
             <i class="fab fa-github"></i>
           </a>
-          <a href="https://youtube.com/@officialGift-md" target="_blank">
+          <a href="https://youtube.com/@officialGift-md" target="_blank" title="YouTube">
             <i class="fab fa-youtube"></i>
           </a>
         </div>
-        <p style="margin-top: 1.5rem;">© 2025 GIFT MD by Isaac Favour. All rights reserved.</p>
+        <p style="margin-top: 2rem;">© 2025 GIFT MD by Isaac Favour. All rights reserved.</p>
       </div>
     </div>
   </div>
