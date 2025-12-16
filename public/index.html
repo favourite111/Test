@@ -81,7 +81,27 @@
         transform: translateY(0);
       }
     }
+    
+.splash-subtext {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 1rem;
+  opacity: 0;
+  animation: subtextAppear 1s ease 0.6s forwards; /* starts slightly after main text */
+}
 
+@keyframes subtextAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+    
     .splash-loader {
       margin-top: 3rem;
       opacity: 0;
@@ -545,20 +565,21 @@
   <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
   
   <div class="splash-screen">
-    <div class="splash-content">
-      <div class="splash-text">GIFT-X</div>
-      <div class="splash-loader">
-        <div class="hexagon-loader">
-          <div class="hexagon"></div>
-          <div class="loading-bars">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-          </div>
+  <div class="splash-content">
+    <div class="splash-text">GIFT-X</div>
+    <div class="splash-subtext">The Ultimate WhatsApp Bot</div> <!-- NEW -->
+    <div class="splash-loader">
+      <div class="hexagon-loader">
+        <div class="hexagon"></div>
+        <div class="loading-bars">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
   <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
   <!-- 🌐 MAIN PAGE - NEW AWESOME DESIGN -->
@@ -599,7 +620,7 @@
   </a>
 
   <a href="/qr" class="feature-card">
-    <i class="fas fa-barcode feature-icon"></i>
+    <i class="fas fa-qrcode"></i>
     <h3 class="feature-title">QR CODE </h3>
     <p class="feature-desc">Get Your Session ID BY SCANNING QR CODE</p>
   </a>
