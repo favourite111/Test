@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIFT MD - Pairing Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    :root {
+      --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary: #00d4ff;
+      --bg-dark: #0a0e27;
+      --glass: rgba(255, 255, 255, 0.05);
+      --text: #ffffff;
+      --muted: #a0aec0;
+      --highlight: #667eea;
+      --radius: 20px;
+      --blur: 20px;
+      --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --glow: 0 0 30px rgba(102, 126, 234, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+      color: var(--text);
+      background: var(--bg-dark);
+      padding: 80px 20px 100px;
+    }
+
+    /* Animated gradient background - same as landing page */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #4facfe);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      filter: blur(100px);
+      opacity: 0.3;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: var(--secondary);
+      border-radius: 50%;
+      opacity: 0.2;
+      animation: float 20s infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-100px) rotate(180deg); }
+    }
+
+    /* Header with logo */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--secondary);
+      box-shadow: var(--glow);
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Battery indicator */
+    .battery-container {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .battery-icon {
+      color: var(--secondary);
+      font-size: 1.2rem;
+    }
+
+    /* Main container */
+    .main-content {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Pairing box */
+    .box {
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: var(--transition);
+    }
+
+    .box:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--glow);
+    }
+
+    .box h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .box h5 {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      font-weight: 400;
+      font-size: 1.1rem;
+    }
+
+    .box p {
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Input styling */
+    .input-container {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .input-container input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+
+    .input-container button {
+      padding: 1rem 2rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.95rem;
+    }
+
+    .input-container button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+
+    .input-container button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Result display */
+    #pair-result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #copy-code {
+      background: rgba(102, 126, 234, 0.2);
+      border: 2px solid var(--secondary);
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+      transition: var(--transition);
+      margin-top: 1rem;
+      display: none;
+      font-size: 0.95rem;
+    }
+
+    #copy-code:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+
+    /* ✅ SUCCESS MESSAGE */
+    .success-message {
+      background: linear-gradient(135deg, #00ff88, #00cc66);
+      color: #000;
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-top: 1rem;
+      font-weight: 700;
+      display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ✅ LOADING SPINNER */
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top: 3px solid var(--secondary);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Back to home button - MOVED TO BOTTOM CENTER */
+    .back-home {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      z-index: 101;
+      font-weight: 600;
+    }
+
+    .back-home:hover {
+      background: var(--primary);
+      transform: translateX(-50%) translateY(-5px);
+      box-shadow: var(--glow);
+    }
+
+    /* Footer info */
+    .footer-info {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-info a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .footer-info a:hover {
+      color: var(--highlight);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header {
+        padding: 0.8rem 1rem;
+      }
+      
+      .logo-text {
+        font-size: 1.2rem;
+      }
+      
+      body {
+        padding: 70px 15px 100px;
+      }
+      
+      .input-container {
+        flex-direction: column;
+      }
+      
+      .input-container button {
+        width: 100%;
+      }
+
+      .back-home {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        bottom: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated background -->
+  <div class="bg-animation"></div>
+
+  <!-- Floating particles -->
+  <div class="particles">
+    <div class="particle" style="width: 4px; height: 4px; left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="width: 6px; height: 6px; left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="width: 3px; height: 3px; left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="width: 5px; height: 5px; left: 40%; animation-delay: 1s;"></div>
+    <div class="particle" style="width: 4px; height: 4px; left: 50%; animation-delay: 3s;"></div>
+    <div class="particle" style="width: 6px; height: 6px; left: 60%; animation-delay: 5s;"></div>
+    <div class="particle" style="width: 3px; height: 3px; left: 70%; animation-delay: 2s;"></div>
+    <div class="particle" style="width: 5px; height: 5px; left: 80%; animation-delay: 4s;"></div>
+    <div class="particle" style="width: 4px; height: 4px; left: 90%; animation-delay: 1s;"></div>
+  </div>
+
+  <!-- Back to Home Button - NOW AT BOTTOM CENTER -->
+  <a href="/" class="back-home">
+    <i class="fas fa-arrow-left"></i>
+    <span>Home</span>
+  </a>
+
+  <!-- Header with Logo -->
+  <header class="header">
+    <div class="logo-container">
+      <img src="https://files.catbox.moe/hoqhfi.jpeg" alt="GIFT MD Logo" class="logo-img">
+      <div class="logo-text">🎁 GIFT MD PAIRING</div>
+    </div>
+    
+    <!-- Battery Indicator -->
+    <div class="battery-container">
+      <i class="fas fa-battery-full battery-icon" id="battery-icon"></i>
+      <span id="battery-level">--%</span>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <div class="main-content">
+    <!-- Pairing Box -->
+    <div class="box">
+      <h2>GET PAIRING CODE</h2>
+      <h5>GIFT MD Bot</h5>
+      <p>Enter your WhatsApp number without country code</p>
+      
+      <div class="input-container">
+        <input type="number" id="number" placeholder="Enter your number" required>
+        <button id="submit">GET CODE</button>
+      </div>
+      
+      <div id="pair-result">
+        <p id="waiting-message" style="display: none;">Please wait...</p>
+      </div>
+      
+      <button id="copy-code" onclick="copyCode()">COPY CODE</button>
+      
+      <!-- ✅ SUCCESS MESSAGE -->
+      <div class="success-message" id="success-message"></div>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="footer-info">
+      <p>Need help? Contact us on <a href="https://whatsapp.com/channel/0029Va90zAnIHphOuO8Msp3A" target="_blank">WhatsApp Channel</a></p>
+      <p style="margin-top: 0.5rem;">© 2025 GIFT MD by Isaac Favour</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+  <script>
+    // DOM elements
+    const pairResult = document.getElementById("pair-result");
+    const submitBtn = document.getElementById("submit");
+    const numberInput = document.getElementById("number");
+    const copyCodeBtn = document.getElementById("copy-code");
+    const waitingMessage = document.getElementById("waiting-message");
+    const successMessage = document.getElementById("success-message");
+    const batteryLevel = document.getElementById("battery-level");
+    const batteryIcon = document.getElementById("battery-icon");
+
+    // ✅ SESSION TRACKING
+    let currentSessionId = null;
+    let checkInterval = null;
+
+    // Copy code function
+    async function copyCode() {
+      const code = pairResult.innerText.replace('CODE: ', '');
+      try {
+        await navigator.clipboard.writeText(code);
+        copyCodeBtn.innerText = "✓ COPIED!";
+        copyCodeBtn.style.background = "linear-gradient(135deg, #00ff88, #00cc66)";
+        copyCodeBtn.style.color = "#000";
+        setTimeout(() => {
+          copyCodeBtn.innerText = "COPY CODE";
+          copyCodeBtn.style.background = "";
+          copyCodeBtn.style.color = "";
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    }
+
+    // ✅ AUTO-CHECK FOR SESSION AND REDIRECT
+    function startSessionCheck() {
+      if (!currentSessionId) return;
+      
+      console.log(`[AUTO-REDIRECT] Waiting for session: ${currentSessionId}`);
+      
+      checkInterval = setInterval(async () => {
+        try {
+          const response = await axios.get(`/check-session/${currentSessionId}`);
+          const data = response.data;
+          
+          if (data.ready) {
+            clearInterval(checkInterval);
+            console.log('[AUTO-REDIRECT] Session ready! Redirecting...');
+            
+            // ✅ Show success message
+            successMessage.textContent = '✅ Pairing successful! Redirecting to your session...';
+            successMessage.style.display = 'block';
+            
+            // ✅ Redirect after 2 seconds
+            setTimeout(() => {
+              window.location.href = data.url;
+            }, 2000);
+          }
+        } catch (err) {
+          console.error('[AUTO-REDIRECT] Check failed:', err);
+        }
+      }, 2000); // Check every 2 seconds
+    }
+
+    // Submit handler
+    submitBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      
+      if (!numberInput.value) {
+        pairResult.innerHTML = '<p style="color:#667eea; font-weight:600;">⚠️ Please enter your WhatsApp number</p>';
+        return;
+      }
+      
+      const cleanNumber = numberInput.value.replace(/[^0-9]/g, "");
+      
+      if (cleanNumber.length < 10) {
+        pairResult.innerHTML = '<p style="color:#ff5555; font-weight:600;">❌ Invalid Number</p>';
+        return;
+      }
+      
+      // Format number display
+      let formattedNumber = "";
+      const digits = cleanNumber.split('');
+      digits.forEach((digit, index) => {
+        formattedNumber += digit;
+        if (index === 2 || index === 7) {
+          formattedNumber += " ";
+        }
+      });
+      
+      numberInput.type = "text";
+      numberInput.value = "+" + formattedNumber;
+      numberInput.style.color = "#00d4ff";
+      
+      // ✅ Show loading with spinner
+      waitingMessage.innerHTML = '<div class="spinner"></div> Getting code...';
+      waitingMessage.style.display = "flex";
+      waitingMessage.style.alignItems = "center";
+      waitingMessage.style.justifyContent = "center";
+      pairResult.innerHTML = "";
+      copyCodeBtn.style.display = "none";
+      successMessage.style.display = "none";
+      submitBtn.disabled = true;
+      
+      try {
+        const { data } = await axios(`/code?number=${cleanNumber}`);
+        const code = data.code || "Service Unavailable";
+        
+        // ✅ Store session ID
+        currentSessionId = data.sessionId;
+        
+        pairResult.innerHTML = `
+          <p style="font-weight:700; font-size:1.3rem;">
+            <span style="color:#a0aec0;">CODE:</span> <span style="color:#00d4ff;">${code}</span>
+          </p>
+        `;
+        copyCodeBtn.style.display = "inline-block";
+        waitingMessage.style.display = "none";
+        submitBtn.disabled = false;
+        
+        // ✅ Start checking for session
+        if (currentSessionId) {
+          console.log(`[AUTO-REDIRECT] Session ID: ${currentSessionId}`);
+          startSessionCheck();
+          
+          // ✅ Show instruction
+          pairResult.innerHTML += '<p style="color:#a0aec0; font-size:0.9rem; margin-top:1rem;">📱 Enter this code in WhatsApp. You\'ll be redirected automatically!</p>';
+        }
+        
+      } catch (error) {
+        pairResult.innerHTML = '<p style="color:#ff5555; font-weight:600;">❌ Error getting pairing code</p>';
+        waitingMessage.style.display = "none";
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Battery status indicator
+    async function updateBattery() {
+      if (navigator.getBattery) {
+        try {
+          const battery = await navigator.getBattery();
+          
+          const updateBatteryUI = () => {
+            const batteryPercent = Math.round(battery.level * 100);
+            batteryLevel.textContent = `${batteryPercent}%`;
+            
+            let iconClass = 'fa-battery-empty';
+            if (batteryPercent > 80) iconClass = 'fa-battery-full';
+            else if (batteryPercent > 60) iconClass = 'fa-battery-three-quarters';
+            else if (batteryPercent > 40) iconClass = 'fa-battery-half';
+            else if (batteryPercent > 20) iconClass = 'fa-battery-quarter';
+            
+            if (battery.charging) {
+              batteryIcon.className = `fas fa-bolt battery-icon`;
+              batteryIcon.style.color = '#00ff88';
+            } else {
+              batteryIcon.className = `fas ${iconClass} battery-icon`;
+              batteryIcon.style.color = batteryPercent < 20 ? '#ff5555' : '#00d4ff';
+            }
+          };
+          
+          battery.addEventListener('levelchange', updateBatteryUI);
+          battery.addEventListener('chargingchange', updateBatteryUI);
+          updateBatteryUI();
+        } catch (error) {
+          console.error('Battery API error:', error);
+        }
+      } else {
+        batteryLevel.textContent = "N/A";
+      }
+    }
+
+    // Initialize
+    window.addEventListener('load', () => {
+      copyCodeBtn.style.display = "none";
+      updateBattery();
+      
+      // Smooth page load
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.transition = 'opacity 0.5s ease';
+        document.body.style.opacity = '1';
+      }, 100);
+    });
+
+    // ✅ Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (checkInterval) {
+        clearInterval(checkInterval);
+      }
+    });
+  </script>
+</body>
+</html>
