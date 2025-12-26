@@ -42,7 +42,7 @@ function makeid(length = 10) {
 }
 
 async function sendWelcomeMessage(sock) {
-    await delay(7000);
+    await delay(8000);
     const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
     try {
         await sock.sendMessage(botNumber, {
@@ -58,15 +58,7 @@ async function sendWelcomeMessage(sock) {
         await sock.sendMessage(botNumber, {
             text: `${global.ses}`,
         },{quoted:global.fake});
-
         console.log(chalk.green('[GIFT-MD] ✅ Startup message sent to User!'));
-
-      try {
-    await sock.groupAcceptInvite('BKp9LSJ1kQJH9Hei1fUrOn');
-    console.log(chalk.blue('✅ auto-follow WhatsApp group successful'));
-} catch (e) {
-    console.log(chalk.red(`🚫 Failed to join WhatsApp group: ${e}`));
-}
 
     } catch (error) {
         console.error(chalk.yellow('[GIFT-MD] ⚠️ Could not send startup message:'), error.message);
@@ -156,13 +148,13 @@ app.get('/code', async (req, res) => {
         
                         global.ses = sessionString;
                         
-                        await delay(1000);
+                        await delay(2000);
                         
                         await sendWelcomeMessage(sock);
                         
                         console.log(`[GIFT-MD] 📝 Session: ${sessionString.length} chars`);
                         
-                        await delay(5000);
+                        await delay(6000);
                         
                         try {
                             await sock.ws.close();
