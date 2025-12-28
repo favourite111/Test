@@ -21,16 +21,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-global.fake= {
-  key: {
-    remoteJid: '0@s.whatsapp.net',
-    fromMe: false,
-    participant: '0@s.whatsapp.net'
-  },
-  message: {
-    extendedTextMessage: {
-      text: `🇳🇬:𝗚𝗜𝗙𝗧_𝗠𝗗:🇳🇬`
-    }}};
 
 function makeid(length = 10) {
     let result = '';
@@ -42,7 +32,7 @@ function makeid(length = 10) {
 }
 
 async function sendWelcomeMessage(sock) {
-    await delay(8000);
+    await delay(5000);
     const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
     try {
         await sock.sendMessage(botNumber, {
@@ -53,11 +43,11 @@ async function sendWelcomeMessage(sock) {
 - 3️⃣ Add environment variable: SESSION_ID
 - 4️⃣ Paste the session code as value
 - 5️⃣ Deploy your bot and enjoy!`,
-        },{quoted:global.fake});
+        });
         await delay(500);
         await sock.sendMessage(botNumber, {
             text: `${global.ses}`,
-        },{quoted:global.fake});
+        });
         console.log(chalk.green('[GIFT-MD] ✅ Startup message sent to User!'));
 
     } catch (error) {
@@ -105,9 +95,10 @@ app.get('/code', async (req, res) => {
 
             if (!sock.authState.creds.registered) {
                 await delay(1500);
+                const custom = "GIFTXBOT";
                 num = num.replace(/[^0-9]/g, '');
                 
-                const code = await sock.requestPairingCode(num);
+                const code = await sock.requestPairingCode(num,custom);
                 console.log(`[GIFT-MD] ✅ Code: ${code}`);
                 
                 if (!code || code.length < 6) {
